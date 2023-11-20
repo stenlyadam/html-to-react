@@ -1,6 +1,36 @@
 import Fade from "react-reveal/Fade";
+import { getDatabase, ref, onValue, child, get } from "firebase/database";
+import { useEffect, useState } from "react";
 
 const Hero = () => {
+  const [title, setTitle] = useState("");
+  const [subTitle, setSubTitle] = useState("");
+
+  useEffect(() => {
+    // const db = getDatabase();
+    // const heroRef = ref(db, "hero/");
+    // onValue(heroRef, (snapshot) => {
+    //   const data = snapshot.val();
+    //   setTitle(data.title);
+    //   setSubTitle(data.subTitle);
+    // });
+
+    const dbRef = ref(getDatabase());
+    get(child(dbRef, `hero`))
+      .then((snapshot) => {
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          setTitle(data.title);
+          setSubTitle(data.subTitle);
+        } else {
+          console.log("No data available");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
   return (
     <Fade bottom delay={1000}>
       <section className="hero section center-content illustration-section-01">
@@ -11,15 +41,14 @@ const Hero = () => {
                 className="mt-0 mb-16 reveal-from-bottom"
                 data-reveal-delay={200}
               >
-                Landing template for startups
+                {title}
               </h1>
               <div className="container-xs">
                 <p
                   className="mt-0 mb-32 reveal-from-bottom"
                   data-reveal-delay={400}
                 >
-                  Our landing page template works on all devices, so you only
-                  have to set it up once, and get beautiful results forever.
+                  {subTitle}
                 </p>
               </div>
             </div>
