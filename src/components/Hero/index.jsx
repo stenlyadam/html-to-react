@@ -5,30 +5,32 @@ import { useEffect, useState } from "react";
 const Hero = () => {
   const [title, setTitle] = useState("");
   const [subTitle, setSubTitle] = useState("");
+  const [image, setImage] = useState("");
 
   useEffect(() => {
-    // const db = getDatabase();
-    // const heroRef = ref(db, "hero/");
-    // onValue(heroRef, (snapshot) => {
-    //   const data = snapshot.val();
-    //   setTitle(data.title);
-    //   setSubTitle(data.subTitle);
-    // });
+    const db = getDatabase();
+    const heroRef = ref(db, "hero/");
+    onValue(heroRef, (snapshot) => {
+      const data = snapshot.val();
+      setTitle(data.title);
+      setSubTitle(data.subTitle);
+      setImage(data.image);
+    });
 
-    const dbRef = ref(getDatabase());
-    get(child(dbRef, `hero`))
-      .then((snapshot) => {
-        if (snapshot.exists()) {
-          const data = snapshot.val();
-          setTitle(data.title);
-          setSubTitle(data.subTitle);
-        } else {
-          console.log("No data available");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    // const dbRef = ref(getDatabase());
+    // get(child(dbRef, `hero`))
+    //   .then((snapshot) => {
+    //     if (snapshot.exists()) {
+    //       const data = snapshot.val();
+    //       setTitle(data.title);
+    //       setSubTitle(data.subTitle);
+    //     } else {
+    //       console.log("No data available");
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error(error);
+    //   });
   }, []);
 
   return (
@@ -63,7 +65,7 @@ const Hero = () => {
             >
               <img
                 className="has-shadow"
-                src="images/hero-image.png"
+                src={`${image}`}
                 alt="Hero image"
                 width={896}
                 height={504}

@@ -1,13 +1,21 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { getDatabase, ref, onValue, child, get } from "firebase/database";
 
 const Features = () => {
   const [features, setFeatures] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:3000/features")
-      .then((res) => setFeatures(res.data));
+    // axios
+    //   .get("http://localhost:3000/features")
+    //   .then((res) => setFeatures(res.data));
+
+    const db = getDatabase();
+    const featuresRef = ref(db, "features/");
+    onValue(featuresRef, (snapshot) => {
+      const data = snapshot.val();
+      setFeatures(data);
+    });
   }, []);
 
   return (
@@ -27,7 +35,7 @@ const Features = () => {
 												"
                       >
                         <img
-                          src={`images/${item.icon}.svg`}
+                          src="images/feature-tile-icon-01.svg"
                           alt="Feature tile icon 01"
                           width={64}
                           height={64}
